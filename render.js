@@ -10,6 +10,12 @@ const keyboardListener = {
     o: () => {
         console.clear()
         console.table(entity.balls)
+    },
+    n: () => {
+        const randomPosX = Math.random() * (CANVAS_WIDTH - 0) + 0;
+        const randomPosY = Math.random() * (CANVAS_HEIGHT - 0) + 0;
+        const randomMass = Math.random() * (25 - 5) + 5;
+        entity.createBall(randomPosX, randomPosY, randomMass);
     }
 }
 
