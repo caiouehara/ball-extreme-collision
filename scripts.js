@@ -1,6 +1,4 @@
 const DEFAULT_VALUES = {
-    VX: 5,
-    VY: 2,
     COLOR: "red",
     MASS_COEFFICIENT: 0.5,
 }
@@ -8,8 +6,8 @@ const DEFAULT_VALUES = {
 const entity = {
     balls: [],
 
-    createBall(posX, posY, mass, color) {
-        this.balls.push(new Ball(posX, posY, mass, color))
+    createBall(posX, posY, vx, vy, mass, color) {
+        this.balls.push(new Ball(posX, posY, vx, vy, mass, color))
     },
 
     moveAll() {
@@ -22,11 +20,9 @@ const entity = {
 const collisions = {
     wall: function (collider) {
         if (collider.posX + collider.radius > CANVAS_WIDTH || collider.posX - collider.radius < 0) {
-            // Problem with Physics?
             collider.applyVx(-collider.vx)
         }
         if (collider.posY + collider.radius > CANVAS_HEIGHT || collider.posY - collider.radius < 0) {
-            // Problem with Physics?
             collider.applyVy(-collider.vy)
         }
     },
@@ -35,15 +31,16 @@ const collisions = {
             const dx = Math.abs(ball.posX - collider.posX + collider.radius);
             const dy = Math.abs(ball.posY - collider.posY + collider.radius);
             const distance = calculatePitagoras(dx, dy);
+            
             if (ball === collider) continue;
             if (ball.radius >= distance) {
-                const newVX = calculateVelocity(ball.vx, ball.mass, collider.vx, collider.mass);
-                const newVY = calculateVelocity(ball.vy, ball.mass, collider.vy, collider.mass);
+                // const newVX = calculateVelocity(ball.vx, ball.mass, collider.vx, collider.mass);
+                // const newVY = calculateVelocity(ball.vy, ball.mass, collider.vy, collider.mass);
 
-                ball.applyVx(newVX.finalV1);
-                collider.applyVx(newVX.finalV2);
-                ball.applyVy(newVY.finalV1);
-                collider.applyVy(newVY.finalV2);
+                // ball.applyVx(newVX.finalV1);
+                // collider.applyVx(newVX.finalV2);
+                // ball.applyVy(newVY.finalV1);
+                // collider.applyVy(newVY.finalV2);
             }
         }
     }
@@ -63,8 +60,8 @@ class Vector {
 }
 
 class Ball extends Vector {
-    constructor(posX, posY, mass, color) {
-        super(DEFAULT_VALUES.VX, DEFAULT_VALUES.VY)
+    constructor(posX, posY, vx, vy, mass, color) {
+        super(vx, vy)
         this.posX = posX;
         this.posY = posY;
         this.radius = mass / DEFAULT_VALUES.MASS_COEFFICIENT;
@@ -77,16 +74,16 @@ class Ball extends Vector {
     }
 }
 
-//http://bolvan.ph.utexas.edu/~vadim/Classes/2008s.homeworks/elastic.pdf (eq 17,18) (perfect elastic collision)
-function calculateVelocity(v1, m1, v2, m2) {
-    const finalV1 = ((m1 - m2) / (m1 + m2) * v1) + ((2 * m2) / (m1 + m2) * v2);
-    const finalV2 = ((m2 - m1) / (m1 + m2) * v2) + ((2 * m1) / (m1 + m2) * v1);
-    return { finalV1, finalV2 };
-}
+//http://bolvan.ph.utexas.edu/~vadim/Classes/2008s.homeworks/elastic.pdf (eq 17,18) (perfect elastic collision) (unidimensional)
+// function calculateVelocity(v1, m1, v2, m2) {
+//     const finalV1 = ((m1 - m2) / (m1 + m2) * v1) + ((2 * m2) / (m1 + m2) * v2);
+//     const finalV2 = ((m2 - m1) / (m1 + m2) * v2) + ((2 * m1) / (m1 + m2) * v1);
+//     return { finalV1, finalV2 };
+// }
 
 function calculatePitagoras(num1, num2){
     return Math.sqrt(num1**2 + num2**2);
 }
 
-entity.createBall(50, 50, 10);
-entity.createBall(500, 50, 10, "blue");
+// posX, posY, vx, vy, mass, color
+entity.createBall(500, 400, 5, 2, 50, "black");

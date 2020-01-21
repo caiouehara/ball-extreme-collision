@@ -46,6 +46,7 @@ function drawBalls() {
         ctx.fillStyle = ball.color;
         ctx.fill()
         ctx.closePath();
+        drawVectorLine(ball)
     }
 }
 
@@ -54,9 +55,20 @@ function drawBackground(){
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 }
 
+function drawVectorLine(vector){
+        // mass is relative with size (radius)
+        const COEFFICIENT = vector.mass * 0.5;
+        ctx.beginPath();
+        ctx.moveTo(vector.posX, vector.posY);
+        ctx.lineTo(vector.posX + (vector.vx * COEFFICIENT), vector.posY + (vector.vy * COEFFICIENT));
+        ctx.strokeStyle = "#FF0000";
+        ctx.stroke();
+        ctx.closePath();
+}
+
 function updateCollision(){
     for(let ball of entity.balls){
-        for(collision in collisions){
+        for(collision in collisions){   
             collisions[collision](ball)
         }
     }
