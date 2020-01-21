@@ -28,12 +28,16 @@ const collisions = {
     },
     ball: function (collider) {
         for (let ball of entity.balls) {
-            const dx = Math.abs(ball.posX - collider.posX + collider.radius);
-            const dy = Math.abs(ball.posY - collider.posY + collider.radius);
-            const distance = calculatePitagoras(dx, dy);
-            
             if (ball === collider) continue;
-            if (ball.radius >= distance) {
+            
+            const dx = Math.abs(ball.posX - collider.posX);
+            const dy = Math.abs(ball.posY - collider.posY);
+            const distance = calculatePitagoras(dx, dy);
+            const collisionAngle = getAngle(ball, collider);
+            
+            if (ball.radius + collider.radius >= distance) {
+                console.log(collisionAngle);
+                console.log("colidiu")
                 // const newVX = calculateVelocity(ball.vx, ball.mass, collider.vx, collider.mass);
                 // const newVY = calculateVelocity(ball.vy, ball.mass, collider.vy, collider.mass);
 
@@ -85,5 +89,12 @@ function calculatePitagoras(num1, num2){
     return Math.sqrt(num1**2 + num2**2);
 }
 
+function getAngle(ball, collider){
+    const dx = Math.abs(ball.posX - collider.posX);
+    const dy = Math.abs(ball.posY - collider.posY);
+    return Math.atan2(dy, dx) * 180/Math.PI;
+}
+
 // posX, posY, vx, vy, mass, color
-entity.createBall(0, 0, 5, 2, 50, "black");
+entity.createBall(0, 200, 0, -2, 50, "yellow");
+entity.createBall(0, -200, 0, 0, 50, "black");
