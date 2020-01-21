@@ -12,16 +12,21 @@ const keyboardListener = {
         console.table(entity.balls)
     },
     n: () => {
-        const randomPosX = Math.random() * (CANVAS_WIDTH - 0) + 0;
-        const randomPosY = Math.random() * (CANVAS_HEIGHT - 0) + 0;
+        // posX, posY, vx, vy, mass, color
+        // problem when radius spawn inside collision area (more than 400 or less than -400)
+        const randomPosX = Math.random() * ( CANVAS_WIDTH/2 - (-CANVAS_WIDTH/2) ) + (-CANVAS_WIDTH/2);
+        const randomPosY = Math.random() * ( CANVAS_HEIGHT/2 - (-CANVAS_HEIGHT/2) ) + (-CANVAS_HEIGHT/2);
+        const randomVx = Math.random() * (10 - 1) + 1;
+        const randomVy = Math.random() * (10 - 1) + 1;
         const randomMass = Math.random() * (25 - 5) + 5;
-        entity.createBall(randomPosX, randomPosY, randomMass);
+        entity.createBall(randomPosX, randomPosY, randomVx, randomVy, randomMass);
     }
 }
 
 function setup() {
     canvasElement.width = CANVAS_WIDTH;
     canvasElement.height = CANVAS_HEIGHT;
+    createCardianPlane();
     createKeyboard()
     createLoop()
 }
@@ -33,7 +38,7 @@ function loop() {
 }
 
 function render(){
-    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    ctx.clearRect(-CANVAS_WIDTH/2, -CANVAS_HEIGHT/2, CANVAS_WIDTH, CANVAS_HEIGHT);
     drawBackground()
     drawBalls()
     entity.moveAll()
@@ -52,7 +57,7 @@ function drawBalls() {
 
 function drawBackground(){
     ctx.fillStyle = "#999966";
-    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    ctx.fillRect(-CANVAS_WIDTH/2, -CANVAS_HEIGHT/2, CANVAS_WIDTH, CANVAS_HEIGHT);
 }
 
 function drawVectorLine(vector){
@@ -88,6 +93,12 @@ function createKeyboard(){
     window.addEventListener("keydown", (event) => { 
         keyboardListener[event.key] ? keyboardListener[event.key]() : console.log();
     })
+}
+
+function createCardianPlane(){
+    const centerX = CANVAS_WIDTH/2;
+    const centerY = CANVAS_HEIGHT/2;
+    ctx.translate(centerX, centerY)
 }
 
 setup()

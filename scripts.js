@@ -1,5 +1,5 @@
 const DEFAULT_VALUES = {
-    COLOR: "red",
+    COLOR: "white",
     MASS_COEFFICIENT: 0.5,
 }
 
@@ -19,10 +19,10 @@ const entity = {
 
 const collisions = {
     wall: function (collider) {
-        if (collider.posX + collider.radius > CANVAS_WIDTH || collider.posX - collider.radius < 0) {
+        if (collider.posX + collider.radius > CANVAS_WIDTH/2 || collider.posX - collider.radius < -CANVAS_WIDTH/2) {
             collider.applyVx(-collider.vx)
         }
-        if (collider.posY + collider.radius > CANVAS_HEIGHT || collider.posY - collider.radius < 0) {
+        if (collider.posY + collider.radius > CANVAS_HEIGHT/2 || collider.posY - collider.radius < -CANVAS_WIDTH/2) {
             collider.applyVy(-collider.vy)
         }
     },
@@ -86,4 +86,4 @@ function calculatePitagoras(num1, num2){
 }
 
 // posX, posY, vx, vy, mass, color
-entity.createBall(500, 400, 5, 2, 50, "black");
+entity.createBall(0, 0, 5, 2, 50, "black");
