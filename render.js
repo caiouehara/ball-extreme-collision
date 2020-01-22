@@ -5,6 +5,7 @@ const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 800;
 const FRAMERATE = 20;
 let time = 0;
+let isRendering = true;
 
 const keyboardListener = {
     o: () => {
@@ -28,6 +29,7 @@ function setup() {
     canvasElement.height = CANVAS_HEIGHT;
     createCardianPlane();
     createKeyboard()
+    createMouse()
     createLoop()
 }
 
@@ -38,10 +40,12 @@ function loop() {
 }
 
 function render(){
-    ctx.clearRect(-CANVAS_WIDTH/2, -CANVAS_HEIGHT/2, CANVAS_WIDTH, CANVAS_HEIGHT);
-    drawBackground()
-    drawBalls()
-    entity.moveAll()
+    if(isRendering){
+        ctx.clearRect(-CANVAS_WIDTH/2, -CANVAS_HEIGHT/2, CANVAS_WIDTH, CANVAS_HEIGHT);
+        drawBackground()
+        drawBalls()
+        entity.moveAll()
+    }
 }
 
 function drawBalls() {
@@ -99,6 +103,24 @@ function createCardianPlane(){
     const centerX = CANVAS_WIDTH/2;
     const centerY = CANVAS_HEIGHT/2;
     ctx.translate(centerX, centerY)
+}
+
+function createMouse(){
+    window.addEventListener("click", (event) => { 
+        // spawn bug off grid in y-axis
+        const {mouseX, mouseY} = getCursorPosition(canvasElement, event);
+        const posX = mouseX - CANVAS_WIDTH/2;
+        const posY = mouseY - CANVAS_HEIGHT/2;
+        entity.createBall(posX, posY, 0, -2, 10, "blue");
+        console.log(`spawned ball in (${posX},${posY})`);
+    });
+}
+
+function getCursorPosition(canvas, event) {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    return {mouseX, mouseY}
 }
 
 setup()

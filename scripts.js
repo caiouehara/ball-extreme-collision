@@ -36,8 +36,9 @@ const collisions = {
             const collisionAngle = getAngle(ball, collider);
             
             if (ball.radius + collider.radius >= distance) {
-                console.log(collisionAngle);
-                console.log("colidiu")
+                // console.log(collisionAngle);
+                // console.log("colidiu")
+                
                 // const newVX = calculateVelocity(ball.vx, ball.mass, collider.vx, collider.mass);
                 // const newVY = calculateVelocity(ball.vy, ball.mass, collider.vy, collider.mass);
 
