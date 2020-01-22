@@ -3,6 +3,15 @@ const DEFAULT_VALUES = {
     MASS_COEFFICIENT: 0.5,
 }
 
+const random = {
+    // problem when radius spawn inside collision area (more than 400 or less than -400)
+    posX: () => Math.random() * ( CANVAS_WIDTH/2 - (-CANVAS_WIDTH/2) ) + (-CANVAS_WIDTH/2),
+    posY: () => Math.random() * ( CANVAS_HEIGHT/2 - (-CANVAS_HEIGHT/2) ) + (-CANVAS_HEIGHT/2),
+    Vx: () => Math.random() * (10 - 1) + 1,
+    Vy: () => Math.random() * (10 - 1) + 1,
+    mass: () => Math.random() * (25 - 5) + 5,
+}
+
 const entity = {
     balls: [],
 

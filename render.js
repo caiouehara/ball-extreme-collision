@@ -14,13 +14,7 @@ const keyboardListener = {
     },
     n: () => {
         // posX, posY, vx, vy, mass, color
-        // problem when radius spawn inside collision area (more than 400 or less than -400)
-        const randomPosX = Math.random() * ( CANVAS_WIDTH/2 - (-CANVAS_WIDTH/2) ) + (-CANVAS_WIDTH/2);
-        const randomPosY = Math.random() * ( CANVAS_HEIGHT/2 - (-CANVAS_HEIGHT/2) ) + (-CANVAS_HEIGHT/2);
-        const randomVx = Math.random() * (10 - 1) + 1;
-        const randomVy = Math.random() * (10 - 1) + 1;
-        const randomMass = Math.random() * (25 - 5) + 5;
-        entity.createBall(randomPosX, randomPosY, randomVx, randomVy, randomMass);
+        entity.createBall(random.posX(), random.posY(), random.Vx(), random.Vy(), random.mass());
     }
 }
 
