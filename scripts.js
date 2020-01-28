@@ -1,93 +1,85 @@
-const DEFAULT_VALUES = {
-    COLOR: "white",
-    MASS_COEFFICIENT: 0.5,
+// creators
+function createCardianPlane() {
+    const centerX = CANVAS_WIDTH / 2;
+    const centerY = CANVAS_HEIGHT / 2;
+    ctx.translate(centerX, centerY)
 }
 
-const random = {
-    // problem when radius spawn inside collision area (more than 400 or less than -400)
-    posX: () => Math.random() * (CANVAS_WIDTH / 2 - (-CANVAS_WIDTH / 2)) + (-CANVAS_WIDTH / 2),
-    posY: () => Math.random() * (CANVAS_HEIGHT / 2 - (-CANVAS_HEIGHT / 2)) + (-CANVAS_HEIGHT / 2),
-    Vx: () => Math.random() * (10 - 1) + 1,
-    Vy: () => Math.random() * (10 - 1) + 1,
-    mass: () => Math.random() * (25 - 5) + 5,
+function createFrameRateLoop() { // disable
+    window.setInterval(() => {
+        loop()
+    }, FRAMERATE)
 }
 
-let balls = [];
-
-const collisions = {
-    wall: function (collider) {
-        if (collider.posX + collider.radius > CANVAS_WIDTH / 2 || collider.posX - collider.radius < -CANVAS_WIDTH / 2) {
-            collider.applyVx(-collider.vx)
-        }
-        if (collider.posY + collider.radius > CANVAS_HEIGHT / 2 || collider.posY - collider.radius < -CANVAS_WIDTH / 2) {
-            collider.applyVy(-collider.vy)
-        }
-    },
-    ball: function (collider) {
-        for (let ball of balls) {
-            if (ball === collider) continue;
-
-            const dx = Math.abs(ball.posX - collider.posX);
-            const dy = Math.abs(ball.posY - collider.posY);
-            const distance = calculatePitagoras(dx, dy);
-
-            if (distance < ball.radius + collider.radius) {
-                // weird collision (maybe the delay for calculate)
-                const { newVx1, newVy1, newVx2, newVy2 } = calculateBidimensionalDynamic(ball, collider);
-
-                ball.applyVx(newVx1);
-                ball.applyVy(newVy1);
-
-                collider.applyVx(newVx2);
-                collider.applyVy(newVy2);
-
-            }
-        }
-    }
+function createListeners() {
+    window.addEventListener("click", (event) => handleMouse(event));
+    window.addEventListener("keydown", (event) => handleKeyboard(event));
 }
 
-class Vector {
-    constructor(vx, vy) {
-        this.vx = vx;
-        this.vy = vy;
-    }
-    speed() {
-        return calculatePitagoras(this.vx, this.vy);
-    }
-    angle() {
-        return Math.atan2(this.vy, this.vx);
-    }
-    applyVx(number) {
-        this.vx = number;
-    }
-    applyVy(number) {
-        this.vy = number;
-    }
+// draw
+function drawBalls(ball) {
+    ctx.beginPath();
+    ctx.arc(ball.posX, ball.posY, ball.radius, 0, 2 * Math.PI);
+    ctx.fillStyle = ball.color;
+    ctx.fill()
+    ctx.closePath();
 }
 
-class Ball extends Vector {
-    constructor(posX, posY, vx, vy, mass, color) {
-        super(vx, vy)
-        this.posX = posX;
-        this.posY = posY;
-        this.radius = mass / DEFAULT_VALUES.MASS_COEFFICIENT;
-        this.mass = mass;
-        color ? this.color = color : this.color = DEFAULT_VALUES.COLOR;
-    }
-    move() {
-        this.posX += this.vx;
-        this.posY += this.vy;
+function drawBackground() {
+    ctx.fillStyle = "#999966";
+    ctx.fillRect(-CANVAS_WIDTH / 2, -CANVAS_HEIGHT / 2, CANVAS_WIDTH, CANVAS_HEIGHT);
+}
+
+function drawVectorLine(ob) {
+    ctx.beginPath();
+    ctx.moveTo(ob.posX, ob.posY);
+    ctx.lineTo(ob.posX + (ob.vx * ob.radius), ob.posY + (ob.vy * ob.radius));
+    ctx.strokeStyle = "#FF0000";
+    ctx.stroke();
+    ctx.closePath();
+}
+
+// handlers
+function handleMouse(e) {
+    // spawn bug off grid in y-axis
+    const { mouseX, mouseY } = getCursorPosition(canvasElement, event);
+    const posX = mouseX - CANVAS_WIDTH / 2;
+    const posY = mouseY - CANVAS_HEIGHT / 2;
+
+    // posX, posY, vx, vy, mass, radius, color
+    createBall(posX, posY, 0, -2, 10, 10, "blue");
+    
+    console.log(`spawned ball in (${posX},${posY})`);
+}
+
+function handleKeyboard() {
+    keyboardBinds[event.key] ? keyboardBinds[event.key]() : console.log();
+}
+
+// updaters
+function updateBalls() {
+    for (let ball of balls) {
+        drawBalls(ball)
+        updateCollision(ball)
+        drawVectorLine(ball)
+        ball.move()
     }
 }
 
-function createBall(posX, posY, vx, vy, mass, color) {
-    balls.push(new Ball(posX, posY, vx, vy, mass, color))
-};
+function updateCollision(ob) {
+    for (collision in collisions) {
+        collisions[collision](ob)
+    }
+}
 
-function moveAll(ball) {
-    ball.move()
-};
+function updateTime() { // disable
+    time += FRAMERATE / 1000;
+}
 
-// posX, posY, vx, vy, mass, color
-// entity.createBall(0, 200, 0, -2, 50, "yellow");
-// entity.createBall(0, -200, 0, 1, 50, "black");
+// utils
+function getCursorPosition(canvas, event) {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    return { mouseX, mouseY }
+}
