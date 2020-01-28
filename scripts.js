@@ -12,19 +12,7 @@ const random = {
     mass: () => Math.random() * (25 - 5) + 5,
 }
 
-const entity = {
-    balls: [],
-
-    createBall(posX, posY, vx, vy, mass, color) {
-        this.balls.push(new Ball(posX, posY, vx, vy, mass, color))
-    },
-
-    moveAll() {
-        for (let ball of this.balls) {
-            ball.move()
-        }
-    }
-}
+let balls = [];
 
 const collisions = {
     wall: function (collider) {
@@ -36,7 +24,7 @@ const collisions = {
         }
     },
     ball: function (collider) {
-        for (let ball of entity.balls) {
+        for (let ball of balls) {
             if (ball === collider) continue;
 
             const dx = Math.abs(ball.posX - collider.posX);
@@ -91,6 +79,14 @@ class Ball extends Vector {
         this.posY += this.vy;
     }
 }
+
+function createBall(posX, posY, vx, vy, mass, color) {
+    balls.push(new Ball(posX, posY, vx, vy, mass, color))
+};
+
+function moveAll(ball) {
+    ball.move()
+};
 
 // posX, posY, vx, vy, mass, color
 // entity.createBall(0, 200, 0, -2, 50, "yellow");
