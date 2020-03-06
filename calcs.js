@@ -5,11 +5,11 @@ function calculateDistance(ob1, ob2){
 }
 
 function calculateDx(ob1, ob2){
-    return Math.abs(ob1.posX - ob2.posX);
+    return ob1.posX - ob2.posX;
 }
 
 function calculateDy(ob1, ob2){
-    return Math.abs(ob1.posY - ob2.posY);
+    return ob1.posY - ob2.posY;
 }
 
 // Head-on Elastic Collisions (perfect elastic collision) (unidimensional)

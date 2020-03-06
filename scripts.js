@@ -47,7 +47,7 @@ function handleMouse(e) {
     const posY = mouseY - CANVAS_HEIGHT / 2;
 
     // posX, posY, vx, vy, mass, radius, color
-    createBall(posX, posY, 0, -2, 10, 10, "blue");
+    createBall(posX, posY, random.vx(), random.vy(), random.mass(), 10, "blue");
     
     console.log(`spawned ball in (${posX},${posY})`);
 }

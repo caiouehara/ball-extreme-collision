@@ -12,9 +12,6 @@ const keyboardBinds = {
         console.clear()
         console.table(balls)
     },
-    n: () => {
-        createBall();
-    }
 }
 
 // main functions
