@@ -7,19 +7,12 @@ const FRAMERATE = 20;
 let time = 0;
 let isRendering = true;
 
-const keyboardBinds = {
-    o: () => {
-        console.clear()
-        console.table(balls)
-    },
-}
-
 // main functions
 function setup() {
     canvasElement.width = CANVAS_WIDTH;
     canvasElement.height = CANVAS_HEIGHT;
 
-    createListeners()
+    eventHandler.createListeners()
     createCardianPlane();
     
     // createFrameRateLoop()

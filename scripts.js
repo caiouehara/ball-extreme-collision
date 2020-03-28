@@ -11,11 +11,6 @@ function createFrameRateLoop() { // disable
     }, FRAMERATE)
 }
 
-function createListeners() {
-    window.addEventListener("click", (event) => handleMouse(event));
-    window.addEventListener("keydown", (event) => handleKeyboard(event));
-}
-
 // draw
 function drawBalls(ball) {
     ctx.beginPath();
@@ -37,23 +32,6 @@ function drawVectorLine(ob) {
     ctx.strokeStyle = "#FF0000";
     ctx.stroke();
     ctx.closePath();
-}
-
-// handlers
-function handleMouse(e) {
-    // spawn bug off grid in y-axis
-    const { mouseX, mouseY } = getCursorPosition(canvasElement, event);
-    const posX = mouseX - CANVAS_WIDTH / 2;
-    const posY = mouseY - CANVAS_HEIGHT / 2;
-
-    // posX, posY, vx, vy, mass, radius, color
-    createBall(posX, posY, random.vx(), random.vy(), random.mass(), 10, "blue");
-    
-    console.log(`spawned ball in (${posX},${posY})`);
-}
-
-function handleKeyboard() {
-    keyboardBinds[event.key] ? keyboardBinds[event.key]() : console.log();
 }
 
 // updaters
@@ -82,4 +60,37 @@ function getCursorPosition(canvas, event) {
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
     return { mouseX, mouseY }
+}
+
+const eventHandler = {
+    keyboardBinds: {
+        o: () => {
+            console.clear()
+            console.table(balls)
+        },
+    },
+    createListeners() {
+        window.addEventListener("click", (event) => this.handleMouse(event));
+        window.addEventListener("keydown", (event) => this.handleKeyboard(event));
+    },
+    handleKeyboard(event) {
+        this.keyboardBinds[event.key] ? this.keyboardBinds[event.key]() : console.log();
+    },
+    handleMouse(event) {
+        // spawn bug off grid in y-axis
+        const { mouseX, mouseY } = this.getCursorPosition(canvasElement, event);
+        const posX = mouseX - CANVAS_WIDTH / 2;
+        const posY = mouseY - CANVAS_HEIGHT / 2;
+
+        // posX, posY, vx, vy, mass, radius, color
+        createBall(posX, posY, random.vx(), random.vy(), random.mass(), 10, "blue");
+
+        console.log(`spawned ball in (${posX},${posY})`);
+    },
+    getCursorPosition(canvas, event) {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
+        return { mouseX, mouseY }
+    },
 }
