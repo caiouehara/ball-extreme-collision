@@ -1,8 +1,8 @@
 const random = {
     vx: () => Math.random() * (2 - -2) + -2,
     vy: () => Math.random() * (2 - -2) + -2,
-    radius: () => Math.random() * (50 - 5) + 5,
-    mass: () => Math.random() * (25 - 5) + 5,
+    // radius: () => Math.random() * (50 - 5) + 5,
+    mass: () => Math.random() * (10 - 5) + 5,
 }
 
 function calculateDistance(ob1, ob2){

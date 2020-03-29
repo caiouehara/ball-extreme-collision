@@ -15,13 +15,14 @@ const collisions = {
         for (let ball of state.balls) {
             if (ball === collider) continue;
             const distance = calculateDistance(ball, collider)
-            
-            if (distance < ball.radius + collider.radius) {
+            const gap = 3;
+
+            if (distance < ball.radius + collider.radius - gap) {
                 const { newVx1, newVy1, newVx2, newVy2 } = calculateBidimensionalDynamic(ball, collider);
                 
                 ball.applyVx(newVx1);
                 ball.applyVy(newVy1);
-
+                
                 collider.applyVx(newVx2);
                 collider.applyVy(newVy2);
 
@@ -65,5 +66,5 @@ class Ball extends Vector {
 }
 
 function createBall(posX, posY, vx, vy, mass, radius, color) {
-    state.balls.push(new Ball(posX, posY, vx, vy, mass, radius, color))
+    state.balls.push(new Ball(posX, posY, vx, vy, mass, mass*2, color))
 };
