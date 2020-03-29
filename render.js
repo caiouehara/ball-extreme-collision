@@ -3,9 +3,6 @@ const ctx = canvasElement.getContext("2d");
 
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 800;
-const FRAMERATE = 20;
-let time = 0;
-let isRendering = true;
 
 // main functions
 function setup() {
@@ -13,25 +10,29 @@ function setup() {
     canvasElement.height = CANVAS_HEIGHT;
 
     eventHandler.createListeners()
-    createCardianPlane();
-    
-    // createFrameRateLoop()
+
     loop()
 }
 
 function loop() {
-    render()
-    // updateTime()
-     
     requestAnimationFrame(loop)
+    
+    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    draw.background()
+
+    update()
 }
 
-function render() {
-    if (isRendering) {
-        ctx.clearRect(-CANVAS_WIDTH / 2, -CANVAS_HEIGHT / 2, CANVAS_WIDTH, CANVAS_HEIGHT);
-        drawBackground()
-        updateBalls()
-    }
+function update(){
+    state.balls.map((ball) => {
+        draw.ball(ball)
+        draw.vectorLine(ball)
+        
+        collisions.wall(ball)
+        collisions.ball(ball)
+
+        ball.move()
+    });
 }
 
 //first call

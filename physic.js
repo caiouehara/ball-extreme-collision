@@ -1,34 +1,24 @@
-// state
-let balls = [];
-
-const random = {
-    // problem when radius spawn inside collision area (more than 400 or less than -400)
-    posX: () => Math.random() * (CANVAS_WIDTH / 2 - (-CANVAS_WIDTH / 2)) + (-CANVAS_WIDTH / 2),
-    posY: () => Math.random() * (CANVAS_HEIGHT / 2 - (-CANVAS_HEIGHT / 2)) + (-CANVAS_HEIGHT / 2),
-    vx: () => Math.random() * (2 - -2) + -2,
-    vy: () => Math.random() * (2 - -2) + -2,
-    radius: () => Math.random() * (50 - 5) + 5,
-    mass: () => Math.random() * (25 - 5) + 5,
+let state = {
+    balls: []
 }
 
 const collisions = {
     wall: function (collider) {
-        if (collider.posX + collider.radius > CANVAS_WIDTH / 2 || collider.posX - collider.radius < -CANVAS_WIDTH / 2) {
+        if (collider.posX + collider.radius > CANVAS_WIDTH || collider.posX - collider.radius < 0 ) {
             collider.applyVx(-collider.vx)
         }
-        if (collider.posY + collider.radius > CANVAS_HEIGHT / 2 || collider.posY - collider.radius < -CANVAS_WIDTH / 2) {
+        if (collider.posY + collider.radius > CANVAS_HEIGHT || collider.posY - collider.radius < 0 ) {
             collider.applyVy(-collider.vy)
         }
     },
     ball: function (collider) {
-        for (let ball of balls) {
+        for (let ball of state.balls) {
             if (ball === collider) continue;
             const distance = calculateDistance(ball, collider)
-
+            
             if (distance < ball.radius + collider.radius) {
-                // weird collision (maybe the delay for calculate)
                 const { newVx1, newVy1, newVx2, newVy2 } = calculateBidimensionalDynamic(ball, collider);
-
+                
                 ball.applyVx(newVx1);
                 ball.applyVy(newVy1);
 
@@ -44,9 +34,6 @@ class Vector {
     constructor(vx, vy) {
         this.vx = vx;
         this.vy = vy;
-
-        if(!vx) this.vx = random.vx();
-        if(!vy) this.vy = random.vy();
     }
     speed() {
         return calculatePitagoras(this.vx, this.vy);
@@ -70,12 +57,6 @@ class Ball extends Vector {
         this.radius = radius;
         this.mass = mass;
         this.color = color;
-
-        if(!posX) this.posX = random.posX();
-        if(!posY) this.posY = random.posY();
-        if(!radius) this.radius = random.radius();
-        if(!mass) this.mass = random.mass();
-        if(!color) this.color = "white";
     }
     move() {
         this.posX += this.vx;
@@ -84,5 +65,5 @@ class Ball extends Vector {
 }
 
 function createBall(posX, posY, vx, vy, mass, radius, color) {
-    balls.push(new Ball(posX, posY, vx, vy, mass, radius, color))
+    state.balls.push(new Ball(posX, posY, vx, vy, mass, radius, color))
 };

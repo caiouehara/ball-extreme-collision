@@ -1,3 +1,10 @@
+const random = {
+    vx: () => Math.random() * (2 - -2) + -2,
+    vy: () => Math.random() * (2 - -2) + -2,
+    radius: () => Math.random() * (50 - 5) + 5,
+    mass: () => Math.random() * (25 - 5) + 5,
+}
+
 function calculateDistance(ob1, ob2){
     const dx = calculateDx(ob1, ob2)
     const dy = calculateDy(ob1, ob2)
@@ -38,7 +45,7 @@ function calculateBidimensionalDynamic(ball, collider) {
     const m2 = collider.mass;
     const v1 = ball.speed();
     const v2 = collider.speed();
-    
+
     const newVx1 = (v1 * Math.cos(theta1 - phi) * (m1-m2) + 2*m2*v2*Math.cos(theta2 - phi)) / (m1+m2) * Math.cos(phi) + v1*Math.sin(theta1-phi) * Math.cos(phi+Math.PI/2);
     const newVy1 = (v1 * Math.cos(theta1 - phi) * (m1-m2) + 2*m2*v2*Math.cos(theta2 - phi)) / (m1+m2) * Math.sin(phi) + v1*Math.sin(theta1-phi) * Math.sin(phi+Math.PI/2);
     const newVx2 = (v2 * Math.cos(theta2 - phi) * (m2-m1) + 2*m1*v1*Math.cos(theta1 - phi)) / (m1+m2) * Math.cos(phi) + v2*Math.sin(theta2-phi) * Math.cos(phi+Math.PI/2);
