@@ -24,8 +24,8 @@ const eventHandler = {
             console.clear()
             console.table(state.balls)
         },
-        l: () =>{
-            loop()
+        t: ()=>{
+            console.log([state.time.fps, state.time.elapsed])
         },
     },
     createListeners() {

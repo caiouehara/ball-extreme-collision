@@ -11,16 +11,27 @@ function setup() {
 
     eventHandler.createListeners()
 
+    state.time.start = Date.now();
+
     loop()
 }
 
 function loop() {
-    requestAnimationFrame(loop)
+    requestAnimationFrame(loop);
     
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    draw.background()
+    draw.background();
 
-    update()
+    time();
+
+    update();
+}
+
+function time(){
+    t = state.time;
+    t.elapsed = (Date.now() - t.start)/1000;
+    t.fps = t.frameCount/t.elapsed;
+    t.frameCount++;
 }
 
 function update(){

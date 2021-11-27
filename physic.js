@@ -1,5 +1,11 @@
 let state = {
-    balls: []
+    balls: [],
+    time: {
+        start: 0,
+        frameCount: 0,
+        fps: 0,
+        elapsed: 0,
+    },
 }
 
 const collisions = {
