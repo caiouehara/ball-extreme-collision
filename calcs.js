@@ -19,20 +19,13 @@ function calculateDy(ob1, ob2){
     return ob1.posY - ob2.posY;
 }
 
-// Head-on Elastic Collisions (perfect elastic collision) (unidimensional)
-// http:bolvan.ph.utexas.edu/~vadim/Classes/2008s.homeworks/elastic.pdf (eq 17,18)
 function calculateUnidimensionalDynamic(v1, m1, v2, m2) {
     const finalV1 = ((m1 - m2) / (m1 + m2) * v1) + ((2 * m2) / (m1 + m2) * v2);
     const finalV2 = ((m2 - m1) / (m1 + m2) * v2) + ((2 * m1) / (m1 + m2) * v1);
     return { finalV1, finalV2 };
 }
 
-// Have to improve
-// Glancing elastic collisions (bidimensional)
-// https://github.com/miskimit/miskimit.github.io/blob/master/ballsballsballs/script.js (another js simulator source code)
-// https://github.com/medermand/Collision/blob/master/Collision.java (java simulator source code)
-// https://www.khanacademy.org/science/physics/linear-momentum/momentum-tutorial/a/what-are-two-dimensional-collisions
-// Comprehensive Physics XI (pg 617)
+// https://github.com/miskimit/miskimit.github.io/blob/master/ballsballsballs/script.js (reference js simulator source code)
 function calculateBidimensionalDynamic(ball, collider) {
     const theta1 = ball.angle();
     const theta2 = collider.angle();

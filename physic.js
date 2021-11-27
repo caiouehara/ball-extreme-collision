@@ -17,6 +17,12 @@ const collisions = {
             const distance = calculateDistance(ball, collider)
             const gap = 3;
 
+            //overlap
+            let overlap = ball.radius + collider.radius - calculateDistance(ball, collider);
+            let smallerObject = ball.radius < collider.radius ? ball : collider;
+            let biggerObject = ball.radius > collider.radius ? ball : collider;
+            let theta = Math.atan2((biggerObject.posY - smallerObject.posY), (biggerObject.posX - smallerObject.posX));
+
             if (distance < ball.radius + collider.radius - gap) {
                 const { newVx1, newVy1, newVx2, newVy2 } = calculateBidimensionalDynamic(ball, collider);
                 
@@ -26,6 +32,8 @@ const collisions = {
                 collider.applyVx(newVx2);
                 collider.applyVy(newVy2);
 
+                smallerObject.posX -= overlap * Math.cos(theta);
+                smallerObject.posY -= overlap * Math.sin(theta); 
             }
         }
     }
